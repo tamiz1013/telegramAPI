@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Form</title>
+  <style>
+    body{
+        margin-top: 40px;
+        text-align: center;
+    }
+    textarea {
+      width: 250px;
+      height: 400px;
+      overflow-y: scroll;
+    }
+    #submit{
+        margin-top: 20px;
+        font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+  <form id="myForm">
+    <textarea id="myTextarea" name="text" value="1"></textarea>
+    <br>
+    <input id="submit" type="submit" value="Submit">
+  </form>
+  <div>
+    <h1 id="message"></h1>
+  </div>
+
+  <script>
+    
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+        let textValue = document.getElementById('myTextarea').value;
+
+      fetch('http://localhost:3005/numberinsert', {
+        method: 'POST',
+        body: textValue
+        })
+        .then(response => {
+            if(response.status==200){
+                return response.json();
+            }else{
+                throw new Error;
+            }
+        })
+        .then(data => {
+            let message = document.getElementById('message');
+            message.innerHTML = data.message;
+            document.getElementById('myTextarea').value='';
+        })
+        .catch((error) => {
+            console.error("Failed");
+        });
+
+      
+    });
+  </script>
+</body>
+</html>
